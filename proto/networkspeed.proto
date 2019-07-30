@@ -4,4 +4,13 @@ package networkspeed;
 
 message Config {
   int64 last_check = 1;
+  repeated Transfer transfers = 2;
 }
+
+message Transfer {
+  int64 message_size = 1;
+  string origin = 2;
+  string destination = 3;
+}
+
+
