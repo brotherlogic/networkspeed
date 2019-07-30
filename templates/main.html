@@ -10,12 +10,14 @@
 	<th>{{.}}</th>
 	{{end}}
       </tr>
+      {{ range .Servers }}
       <tr>
-	<td>tasklist</td><td>50</td><td>60</td>
+	<td>{{.}}</td>
+	{{ range .Servers }}
+	<td>{{.}}</td>
+	{{ end }}
       </tr>
-      <tr>
-	<td>stack1</td><td>50</td><td>60</td>
-      </tr>
+      {{ end }}
     </table>
   </body>
 </html>
