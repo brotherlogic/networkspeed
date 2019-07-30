@@ -10,11 +10,11 @@
 	<th>{{.}}</th>
 	{{end}}
       </tr>
-      {{ range .Servers }}
+      {{ range $server1 := .Servers }}
       <tr>
 	<td>{{.}}</td>
-	{{ range .Servers }}
-	<td>{{.}}</td>
+	{{ range $server2 := .Servers }}
+	<td>{{$server2}}</td>
 	{{ end }}
       </tr>
       {{ end }}
