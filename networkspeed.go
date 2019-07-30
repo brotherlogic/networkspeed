@@ -19,12 +19,70 @@ import (
 const (
 	// KEY - where we store sale info
 	KEY = "/github.com/brotherlogic/networkspeedr/config"
+
+	// PayloadInBytes the size of the payload in bytes
+	PayloadInBytes = 1024 * 1024 * 1024 // 1Mb
 )
+
+type bridge interface {
+	getServers(ctx context.Context) ([]string, error)
+	makeTransfer(ctx context.Context, server string) (*pb.TransferResponse, error)
+	recordTransfer(ctx context.Context, trans *pb.Transfer) (*pb.RecordResponse, error)
+}
+
+type prodBridge struct {
+	dial       func(server string) (*grpc.ClientConn, error)
+	dialServer func(job, server string) (*grpc.ClientConn, error)
+}
+
+func (p *prodBridge) getServers(ctx context.Context) ([]string, error) {
+	response := []string{}
+	entries, err := utils.ResolveAll("networkspeed")
+	if err != nil {
+		return response, err
+	}
+
+	for _, entry := range entries {
+		response = append(response, entry.Identifier)
+	}
+
+	return response, nil
+}
+
+func (p *prodBridge) makeTransfer(ctx context.Context, server string) (*pb.TransferResponse, error) {
+	t := time.Now()
+	conn, err := p.dialServer("networkspeed", server)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	client := pb.NewTransferServiceClient(conn)
+	payload := buildPayload(PayloadInBytes)
+	procTime := time.Now().Sub(t).Nanoseconds()
+	resp, err := client.MakeTransfer(ctx, &pb.TransferRequest{ByteSize: PayloadInBytes, Payload: payload})
+	if err == nil {
+		resp.ProcessingTime = procTime
+	}
+	return resp, err
+}
+
+func (p *prodBridge) recordTransfer(ctx context.Context, trans *pb.Transfer) (*pb.RecordResponse, error) {
+	conn, err := p.dial("networkspeed")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	client := pb.NewTransferServiceClient(conn)
+	return client.RecordTransfer(ctx, &pb.RecordRequest{Transfer: trans})
+}
 
 //Server main server type
 type Server struct {
 	*goserver.GoServer
 	config *pb.Config
+	bridge bridge
 }
 
 // Init builds the server
@@ -33,6 +91,7 @@ func Init() *Server {
 		GoServer: &goserver.GoServer{},
 		config:   &pb.Config{},
 	}
+	s.bridge = &prodBridge{dial: s.DialMaster, dialServer: s.DialServer}
 	return s
 }
 
@@ -107,6 +166,8 @@ func main() {
 		server.save(ctx)
 		return
 	}
+
+	server.RegisterRepeatingTaskNonMaster(server.runTransfer, "run_transfer", time.Minute)
 
 	fmt.Printf("%v", server.Serve())
 }

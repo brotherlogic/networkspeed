@@ -11,6 +11,7 @@ message Transfer {
   int64 message_size = 1;
   string origin = 2;
   string destination = 3;
+  int64 time_in_microseconds = 4;
 }
 
 message TransferRequest {
@@ -20,6 +21,7 @@ message TransferRequest {
 
 message TransferResponse {
   int64 processing_time = 1;
+  int64 message_size = 2;
 }
 
 message RecordRequest {
