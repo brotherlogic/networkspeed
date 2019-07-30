@@ -11,7 +11,7 @@ message Transfer {
   int64 message_size = 1;
   string origin = 2;
   string destination = 3;
-  int64 time_in_microseconds = 4;
+  int64 time_in_nanoseconds = 4;
 }
 
 message TransferRequest {

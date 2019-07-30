@@ -26,7 +26,7 @@ func (s *Server) runTransfer(ctx context.Context) error {
 		t := time.Now()
 		resp, err := s.bridge.makeTransfer(ctx, servers[i])
 		if err == nil {
-			s.bridge.recordTransfer(ctx, &pb.Transfer{Destination: servers[i], Origin: s.Registry.Identifier, MessageSize: resp.MessageSize, TimeInMicroseconds: time.Now().Sub(t).Nanoseconds()})
+			s.bridge.recordTransfer(ctx, &pb.Transfer{Destination: servers[i], Origin: s.Registry.Identifier, MessageSize: resp.MessageSize, TimeInNanoseconds: time.Now().Sub(t).Nanoseconds()})
 			return nil
 		}
 	}
