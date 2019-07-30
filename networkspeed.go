@@ -21,7 +21,7 @@ const (
 	KEY = "/github.com/brotherlogic/networkspeedr/config"
 
 	// PayloadInBytes the size of the payload in bytes
-	PayloadInBytes = 1024 * 1024 * 1024 // 1Mb
+	PayloadInBytes = 1024 * 1024 // 1Mb
 )
 
 type bridge interface {
