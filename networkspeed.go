@@ -148,21 +148,21 @@ func (s *Server) GetState() []*pbg.State {
 }
 
 type properties struct {
-	servers []string
+	Servers []string
 }
 
 func (s *Server) deliver(w http.ResponseWriter, r *http.Request) {
-	props := properties{servers: []string{}}
+	props := properties{Servers: []string{}}
 	for _, transfer := range s.config.Transfers {
 		found := false
-		for _, server := range props.servers {
+		for _, server := range props.Servers {
 			if server == transfer.Origin {
 				found = true
 			}
 		}
 
 		if !found {
-			props.servers = append(props.servers, transfer.Origin)
+			props.Servers = append(props.Servers, transfer.Origin)
 		}
 	}
 	data, err := Asset("templates/main.html")
