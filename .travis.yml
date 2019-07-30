@@ -18,4 +18,4 @@ before_install:
 
 script:
 - fgt golint $(find . | grep .go$ | grep -v networkspeed.pb.go)
-- $HOME/gopath/bin/goveralls -service=travis-ci -ignore=networkspeed.go -package github.com/brotherlogic/networkspeed
+- $HOME/gopath/bin/goveralls -service=travis-ci -ignore=networkspeed.go,templates.go -package github.com/brotherlogic/networkspeed

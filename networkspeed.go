@@ -3,8 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
+	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/brotherlogic/goserver"
@@ -144,6 +147,39 @@ func (s *Server) GetState() []*pbg.State {
 	}
 }
 
+type properties struct {
+}
+
+func (s *Server) deliver(w http.ResponseWriter, r *http.Request) {
+	data, err := Asset("templates/main.html")
+	if err != nil {
+		fmt.Fprintf(w, fmt.Sprintf("Error: %v", err))
+		return
+	}
+	err = s.render(string(data), properties{}, w)
+	if err != nil {
+		s.Log(fmt.Sprintf("Error writing: %v", err))
+	}
+}
+
+func (s *Server) render(f string, props properties, w io.Writer) error {
+	templ := template.New("main")
+	templ, err := templ.Parse(f)
+	if err != nil {
+		return err
+	}
+	templ.Execute(w, props)
+	return nil
+}
+
+func (s *Server) serveUp(port int32) {
+	http.HandleFunc("/", s.deliver)
+	err := http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
 	var quiet = flag.Bool("quiet", false, "Show all output")
 	var init = flag.Bool("init", false, "Do setup")
@@ -166,6 +202,8 @@ func main() {
 		server.save(ctx)
 		return
 	}
+
+	go server.serveUp(server.Registry.Port - 1)
 
 	server.RegisterRepeatingTaskNonMaster(server.runTransfer, "run_transfer", time.Minute)
 
