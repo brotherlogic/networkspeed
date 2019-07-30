@@ -148,15 +148,29 @@ func (s *Server) GetState() []*pbg.State {
 }
 
 type properties struct {
+	servers []string
 }
 
 func (s *Server) deliver(w http.ResponseWriter, r *http.Request) {
+	props := properties{servers: []string{}}
+	for _, transfer := range s.config.Transfers {
+		found := false
+		for _, server := range props.servers {
+			if server == transfer.Origin {
+				found = true
+			}
+		}
+
+		if !found {
+			props.servers = append(props.servers, transfer.Origin)
+		}
+	}
 	data, err := Asset("templates/main.html")
 	if err != nil {
 		fmt.Fprintf(w, fmt.Sprintf("Error: %v", err))
 		return
 	}
-	err = s.render(string(data), properties{}, w)
+	err = s.render(string(data), props, w)
 	if err != nil {
 		s.Log(fmt.Sprintf("Error writing: %v", err))
 	}

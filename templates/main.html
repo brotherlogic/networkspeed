@@ -6,7 +6,10 @@
     <h1>Network Speed</h1>
     <table>
       <tr>
-	<th></th><th>tasklist</th><th>stack1</th>
+	<th></th>
+	{{ range .servers }}
+	<th>{{.}}</th>
+	{{end}}
       </tr>
       <tr>
 	<td>tasklist</td><td>50</td><td>60</td>
