@@ -13,4 +13,23 @@ message Transfer {
   string destination = 3;
 }
 
+message TransferRequest {
+  int64 byte_size = 1;
+  bytes payload = 2;
+}
+
+message TransferResponse {
+  int64 processing_time = 1;
+}
+
+message RecordRequest {
+  Transfer transfer = 1;
+}
+
+message RecordResponse {}
+
+service TransferService {
+  rpc MakeTransfer(TransferRequest) returns (TransferResponse) {};
+  rpc RecordTransfer(RecordRequest) returns (RecordResponse) {};
+}
 
