@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 
@@ -113,5 +114,15 @@ func TestBuildProps(t *testing.T) {
 	props := s.buildProps()
 	if props.Timing["server1"]["server3"] != 40 {
 		t.Errorf("Bad timing compute: %+v", props)
+	}
+
+	data, err := Asset("templates/main.html")
+	if err != nil {
+		t.Errorf("Cannot parse asset: %v", err)
+	}
+	var buf bytes.Buffer
+	err = s.render(string(data), props, &buf)
+	if err != nil {
+		t.Errorf("Render error: %v", err)
 	}
 }
