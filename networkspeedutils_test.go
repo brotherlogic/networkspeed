@@ -91,3 +91,27 @@ func TestBuildPayload(t *testing.T) {
 		t.Errorf("Payload is empty")
 	}
 }
+
+func TestParseWeb(t *testing.T) {
+	_, err := Asset("templates/main.html")
+	if err != nil {
+		t.Errorf("Cannot parse asset: %v", err)
+	}
+}
+
+func TestBuildProps(t *testing.T) {
+	s := InitTest()
+	_, err := s.RecordTransfer(context.Background(), &pb.RecordRequest{Transfer: &pb.Transfer{Origin: "server1", Destination: "server2", TimeInNanoseconds: int64(20)}})
+	if err != nil {
+		t.Errorf("Transfer record failed: %v", err)
+	}
+	_, err = s.RecordTransfer(context.Background(), &pb.RecordRequest{Transfer: &pb.Transfer{Origin: "server1", Destination: "server3", TimeInNanoseconds: int64(40)}})
+	if err != nil {
+		t.Errorf("Transfer record failed: %v", err)
+	}
+
+	props := s.buildProps()
+	if props.Timing["server1"]["server3"] != 40 {
+		t.Errorf("Bad timing compute: %+v", props)
+	}
+}

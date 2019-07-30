@@ -39,3 +39,40 @@ func buildPayload(sizeInBytes int) []byte {
 	rand.Read(resp)
 	return resp
 }
+
+func (s *Server) buildProps() properties {
+	props := properties{Servers: []string{}, Timing: make(map[string]map[string]int64)}
+	counts := make(map[string]map[string]int64)
+	for _, transfer := range s.config.Transfers {
+		found := false
+		for _, server := range props.Servers {
+			if server == transfer.Origin {
+				found = true
+			}
+		}
+
+		if !found {
+			props.Servers = append(props.Servers, transfer.Origin)
+		}
+		if _, ok := props.Timing[transfer.Origin]; !ok {
+			props.Timing[transfer.Origin] = make(map[string]int64)
+			counts[transfer.Origin] = make(map[string]int64)
+		}
+
+		if _, ok := props.Timing[transfer.Destination]; !ok {
+			props.Timing[transfer.Origin][transfer.Destination] = 0
+			counts[transfer.Origin][transfer.Destination] = 0
+		}
+
+		props.Timing[transfer.Origin][transfer.Destination] += transfer.TimeInNanoseconds
+		counts[transfer.Origin][transfer.Destination]++
+	}
+
+	for origin, omap := range props.Timing {
+		for destination, val := range omap {
+			props.Timing[origin][destination] = val / counts[origin][destination]
+		}
+	}
+
+	return props
+}
