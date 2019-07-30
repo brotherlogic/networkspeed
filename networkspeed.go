@@ -170,6 +170,7 @@ func (s *Server) deliver(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, fmt.Sprintf("Error: %v", err))
 		return
 	}
+	s.Log(fmt.Sprintf("Building table with %+v", props))
 	err = s.render(string(data), props, w)
 	if err != nil {
 		s.Log(fmt.Sprintf("Error writing: %v", err))
