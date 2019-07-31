@@ -9,6 +9,7 @@
 	<th></th>
 	{{ $s1s := .Servers }}
 	{{ $s2s := .Servers2 }}
+	{{ $tmap := .Timing }}
 	{{ range $server3 := .Servers }}
 	<th>{{$server3}}</th>
 	{{end}}
@@ -17,7 +18,7 @@
         <tr>
 	  <td><b>{{$server1}}</b></td>
           {{ range $server2 := $s2s }}
-  	    <td>{{index .Timing $server1 $server2}}</td>
+  	    <td>{{index $tmap $server1 $server2}}</td>
 	    {{end}}
         </tr>
       {{end}}
