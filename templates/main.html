@@ -17,9 +17,8 @@
         <tr>
 	  <td><b>{{$server1}}</b></td>
           {{ range $server2 := $s2s }}
-  	    <td>THING {{$server2}}</td>
+  	    <td>{{index .Timing $server1 $server2}}</td>
 	    {{end}}
-	    <td>Marker</td>
         </tr>
       {{end}}
     </table>
