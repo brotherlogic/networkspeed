@@ -6,17 +6,18 @@
     <h1>Network Speed</h1>
     <table border=1>
       <tr>
+	<th></th>
 	{{ range $server3 := .Servers }}
 	<th>{{$server3}}</th>
 	{{end}}
       </tr>
       {{ range $server1 := .Servers }}
-      <tr>
-	<td><b>{{$server1}}</b></td>
+        <tr>
+	  <td><b>{{$server1}}</b></td>
           {{ range $server2 := .Servers }}
-  	<td>{{$server2}}</td>
-	{{end}}
-      </tr>
+  	    <td>{{$server2}}</td>
+	  {{end}}
+        </tr>
       {{end}}
     </table>
   </body>
