@@ -186,7 +186,7 @@ func (s *Server) serveUp(port int32) {
 }
 
 func main() {
-	var quiet = flag.Bool("quiet", false, "Show all output")
+	var quiet = flag.Bool("quiet", false, "Show all the output")
 	var init = flag.Bool("init", false, "Do setup")
 	flag.Parse()
 
