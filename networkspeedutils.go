@@ -70,7 +70,7 @@ func (s *Server) buildProps() properties {
 
 	for origin, omap := range props.Timing {
 		for destination, val := range omap {
-			props.Timing[origin][destination] = val / counts[origin][destination]
+			props.Timing[origin][destination] = (val / counts[origin][destination]) / 1000000
 		}
 	}
 
