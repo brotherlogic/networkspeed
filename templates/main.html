@@ -4,7 +4,7 @@
   </head>
   <body>
     <h1>Network Speed</h1>
-    <table>
+    <table border=1>
       <tr>
 	{{ range $server3 := .Servers }}
 	<th>{{$server3}}</th>
@@ -12,9 +12,12 @@
       </tr>
       {{ range $server1 := .Servers }}
       <tr>
-	<td><b>{{$server1}}</b></td><td></td>
+	<td><b>{{$server1}}</b></td>
+          {{ range $server2 := .Servers }}
+  	<td>{{$server2}}</td>
+	{{end}}
       </tr>
-      {{ end }}
+      {{end}}
     </table>
   </body>
 </html>
