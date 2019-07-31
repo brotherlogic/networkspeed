@@ -1,5 +1,3 @@
-# frametracker
+# networkspeed
 
-
-
-[![Coverage Status](https://coveralls.io/repos/github/brotherlogic/frametracker/badge.svg)](https://coveralls.io/github/brotherlogic/frametracker)# networkspeed
+[![Coverage Status](https://coveralls.io/repos/github/brotherlogic/networkspeed/badge.svg)](https://coveralls.io/github/brotherlogic/networkspeedx)# 
