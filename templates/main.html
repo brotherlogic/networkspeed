@@ -12,9 +12,9 @@
       </tr>
       {{ range $server1 := .Servers }}
       <tr>
-	<td>{{.}}</td>
+	<td>{{$server1}}</td>
 	{{ range $server2 := .Servers }}
-	<td>{{$server2}}</td>
+	<td>{{index .Timing $server1 $server2}}</td>
 	{{ end }}
       </tr>
       {{ end }}
