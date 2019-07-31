@@ -74,5 +74,6 @@ func (s *Server) buildProps() properties {
 		}
 	}
 
+	props.Servers2 = props.Servers
 	return props
 }
