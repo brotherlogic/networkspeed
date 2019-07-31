@@ -106,13 +106,13 @@ func TestBuildProps(t *testing.T) {
 	if err != nil {
 		t.Errorf("Transfer record failed: %v", err)
 	}
-	_, err = s.RecordTransfer(context.Background(), &pb.RecordRequest{Transfer: &pb.Transfer{Origin: "server1", Destination: "server3", TimeInNanoseconds: int64(40)}})
+	_, err = s.RecordTransfer(context.Background(), &pb.RecordRequest{Transfer: &pb.Transfer{Origin: "server1", Destination: "server3", TimeInNanoseconds: int64(4000000)}})
 	if err != nil {
 		t.Errorf("Transfer record failed: %v", err)
 	}
 
 	props := s.buildProps()
-	if props.Timing["server1"]["server3"] != 40 {
+	if props.Timing["server1"]["server3"] != 4 {
 		t.Errorf("Bad timing compute: %+v", props)
 	}
 
