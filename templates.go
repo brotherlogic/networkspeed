@@ -81,7 +81,7 @@ func templatesMainHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/main.html", size: 400, mode: os.FileMode(436), modTime: time.Unix(1564532119, 0)}
+	info := bindataFileInfo{name: "templates/main.html", size: 400, mode: os.FileMode(436), modTime: time.Unix(1564538647, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
