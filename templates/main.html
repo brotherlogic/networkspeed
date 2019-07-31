@@ -14,7 +14,7 @@
       {{ range $server1 := .Servers }}
         <tr>
 	  <td><b>{{$server1}}</b></td>
-          {{ range $server2 := .Servers }}
+          {{ range $server2 := .Servers2 }}
   	    <td>{{$server2}}</td>
 	  {{end}}
         </tr>

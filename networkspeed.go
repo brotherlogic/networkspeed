@@ -148,8 +148,9 @@ func (s *Server) GetState() []*pbg.State {
 }
 
 type properties struct {
-	Servers []string
-	Timing  map[string]map[string]int64
+	Servers  []string
+	Servers2 []string
+	Timing   map[string]map[string]int64
 }
 
 func (s *Server) deliver(w http.ResponseWriter, r *http.Request) {
